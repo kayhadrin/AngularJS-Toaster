@@ -114,6 +114,7 @@ angular.module('toaster', ['ngAnimate'])
     'body-template': 'toasterBodyTmpl.html',
     'icon-class': 'toast-info',
     'position-class': 'toast-top-right',
+    'toast-class': '',
     'title-class': 'toast-title',
     'message-class': 'toast-message',
     'default-id-prefix': '__toast-'
@@ -135,6 +136,7 @@ function ($compile, $timeout, $sce, toasterConfig, toaster) {
             scope.config = {
                 position: mergedConfig['position-class'],
                 title: mergedConfig['title-class'],
+                toastClass: mergedConfig['toast-class'],
                 message: mergedConfig['message-class'],
                 tap: mergedConfig['tap-to-dismiss'],
                 closeButton: mergedConfig['close-button']
@@ -330,10 +332,10 @@ function ($compile, $timeout, $sce, toasterConfig, toaster) {
         }],
         template:
         '<div  id="toast-container" ng-class="config.position">' +
-            '<div ng-repeat="toaster in toasters" class="toast" ng-class="toaster.type" ng-click="click(toaster)" ng-mouseover="stopTimer(toaster)"  ng-mouseout="restartTimer(toaster)">' +
+            '<div ng-repeat="toaster in toasters" class="toast" ng-class="toaster.type + \' \' + config.toastClass" ng-click="click(toaster)" ng-mouseover="stopTimer(toaster)"  ng-mouseout="restartTimer(toaster)">' +
               '<button class="toast-close-button" ng-show="config.closeButton">&times;</button>' +
               '<div ng-class="config.title">{{toaster.title}}</div>' +
-              '<div ng-class="config.message" ng-switch on="toaster.bodyOutputType">' +
+              '<div ng-class="config.message + \' __bodyOutputType__\' + toaster.bodyOutputType" ng-switch on="toaster.bodyOutputType">' +
                 '<div ng-switch-when="trustedHtml" ng-bind-html="toaster.html"></div>' +
                 '<div ng-switch-when="template"><div ng-include="toaster.bodyTemplate"></div></div>' +
                 '<div ng-switch-default >{{toaster.body}}</div>' +
